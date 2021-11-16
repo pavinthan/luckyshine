@@ -1,9 +1,12 @@
 import { server } from '@hapi/hapi';
+import dotenv from 'dotenv';
 import { port, host } from './config';
 import { swaggerPlugins } from './plugins';
 import routes from './routes';
 import { treasuresRoutes } from './treasures';
 import type { Server, ServerInfo } from '@hapi/hapi';
+
+dotenv.config();
 
 class App {
   private app?: Server;

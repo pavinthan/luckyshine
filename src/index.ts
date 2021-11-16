@@ -1,7 +1,4 @@
-import dotenv from 'dotenv';
 import app from './app';
-
-dotenv.config();
 
 app.init().then(() => {
   app.start().then(() => {
