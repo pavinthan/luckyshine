@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma, Treasure } from '@prisma/client';
 
 export class TreasureService {
   private prisma: PrismaClient;
@@ -7,11 +7,41 @@ export class TreasureService {
     this.prisma = new PrismaClient();
   }
 
-  public async create(values: any) {
+  public async create({ prize_value: prizeValue, ...values }: any) {
     try {
-      return await this.prisma.treasure.create({
-        data: values,
+      let treasure = await this.prisma.treasure.findFirst({
+        where: {
+          name: values.name,
+          latitude: values.latitude,
+          longitude: values.longitude,
+        },
       });
+
+      if (treasure) {
+        await this.updateById(treasure.id, values);
+      } else {
+        treasure = await this.prisma.treasure.create({
+          data: values,
+        });
+      }
+
+      const moneyValue = await this.prisma.moneyValue.findFirst({
+        where: {
+          treasure_id: treasure.id,
+          amount: prizeValue,
+        },
+      });
+
+      if (!moneyValue) {
+        await this.prisma.moneyValue.create({
+          data: {
+            treasure_id: treasure.id,
+            amount: prizeValue,
+          },
+        });
+      }
+
+      return treasure;
     } catch (error) {
       console.log(error);
     } finally {
@@ -31,10 +61,13 @@ export class TreasureService {
     }
   }
 
-  public async getAll(query = {}) {
+  public async getAll(params: any = {}) {
     try {
-      console.log(query);
-      return await this.prisma.treasure.findMany();
+      const prizeValue = params.prize_value || 10;
+
+      return await this.prisma.$queryRaw<Treasure[]>(
+        Prisma.sql`SELECT *, (6371 * acos(cos(radians(${params.latitude}))*cos(radians(latitude)) * cos(radians(longitude) - radians(${params.longitude})) + sin(radians(${params.latitude})) * sin(radians(latitude)))) AS distance FROM treasures AS t WHERE EXISTS (SELECT amount, treasure_id FROM money_values AS m WHERE m.treasure_id = t.id AND m.amount >= ${prizeValue}) HAVING distance < ${params.distance}`
+      );
     } catch (error) {
       console.log(error);
     } finally {

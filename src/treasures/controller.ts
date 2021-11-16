@@ -11,4 +11,13 @@ export class TreasureController {
       return Boom.badImplementation(JSON.stringify(error));
     }
   }
+
+  public async store(request: Request, h: ResponseToolkit) {
+    try {
+      const result = await new TreasureService().create(request.payload);
+      return h.response(result).code(201);
+    } catch (error) {
+      return Boom.badImplementation(JSON.stringify(error));
+    }
+  }
 }

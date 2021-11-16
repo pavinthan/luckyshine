@@ -1,15 +1,17 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../src/app';
-import { host, port } from '../src/config';
+import { App } from '../src/app';
+import { host } from '../src/config';
 
+const port = '6000';
 chai.use(chaiHttp);
 
-describe('end-to-end / integration tests', () => {
+describe('integration tests', () => {
+  const app = new App();
   const API = `http://${host}:${port}`;
 
   beforeAll(async () => {
-    await app.init();
+    await app.init(host, port);
     await app.start();
   });
 
@@ -54,7 +56,7 @@ describe('end-to-end / integration tests', () => {
         });
     });
 
-    it('Should return all treasures in the database', (done) => {
+    it('Should return all valid treasures in the database', (done) => {
       chai
         .request(API)
         .get(
@@ -62,6 +64,22 @@ describe('end-to-end / integration tests', () => {
         )
         .end((err, res) => {
           expect(res).to.have.status(200);
+          done();
+        });
+    });
+
+    it('Should return created response', (done) => {
+      chai
+        .request(API)
+        .post('/treasures')
+        .send({
+          name: 'Example',
+          latitude: 1.32303589,
+          longitude: 103.8774815,
+          prize_value: 10,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
           done();
         });
     });

@@ -24,6 +24,22 @@ const treasureRoutes = {
           },
         },
       },
+      {
+        method: 'POST',
+        path: '/treasures',
+        handler: controller.store,
+        options: {
+          tags: ['api'],
+          validate: {
+            payload: Joi.object({
+              name: Joi.string().min(50).max(255).required(),
+              latitude: Joi.number().min(0).max(90).required(),
+              longitude: Joi.number().min(-180).max(180).required(),
+              prize_value: Joi.number().integer().min(10).max(30).default(10),
+            }).options({ stripUnknown: true }),
+          },
+        },
+      },
     ]);
   },
 };
