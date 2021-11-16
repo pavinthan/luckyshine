@@ -1,16 +1,14 @@
 version: '3.8'
 services:
-  # app:
-  #   build:
-  #     context: '.'
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - '3000:3000'
-  #   depends_on:
-  #     - mysql
-  #   environment:
-  #     - DATABASE_URL=mysql://roo@${DB_PASSWORD}/${DB_DATABASE}
+  app:
+    build:
+      context: '.'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mysql
+    environment:
+      - DATABASE_URL=mysql://root:${DB_PASSWORD}@mysql:3306/${DB_DATABASE}
   mysql:
     image: mysql:latest
     restart: always
