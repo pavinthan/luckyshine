@@ -1,6 +1,7 @@
 import type { RegisterOptions } from 'hapi-swagger';
 
 export const swaggerOptions: RegisterOptions = {
+  documentationPath: '/',
   info: {
     title: 'LuckyShine',
     version: '1.0.0',

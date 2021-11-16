@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import { port, host } from './config';
 import { swaggerPlugins } from './plugins';
 import routes from './routes';
-import { treasuresRoutes } from './treasures';
 import type { Server, ServerInfo } from '@hapi/hapi';
 
 dotenv.config();
@@ -16,7 +15,7 @@ class App {
 
     await Promise.all([
       this.app.register(swaggerPlugins, { once: true }),
-      this.app.register([routes, treasuresRoutes], { once: true }),
+      this.app.register(routes, { once: true }),
     ]);
 
     await this.app?.initialize();

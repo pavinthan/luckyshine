@@ -1,16 +1,8 @@
-import type { Request, Server } from '@hapi/hapi';
+import { treasuresRoutes } from './treasures';
 
-const route = {
-  name: 'index',
-  register: async (server: Server) => {
-    server.route({
-      method: 'GET',
-      path: '/',
-      handler: (request: Request) => {
-        return `Welcome! please find the api documentation at ${request.info.host}/documentation`;
-      },
-    });
-  },
-};
+const route = [
+  treasuresRoutes,
+  //
+];
 
 export default route;
