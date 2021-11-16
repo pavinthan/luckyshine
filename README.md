@@ -4,7 +4,7 @@
 
 LuckyShine is a game where users can collect treasures in a given latitude and longitude. Every treasure that is collected will have points based on the monetary value. A treasure may have more than one money value, it depends on the user’s luck. Lucky users may get the highest money from the treasure that has been collected.
 
-## Configuration
+## Config
 
 ```bash
 $ cp .env.example .env
@@ -16,13 +16,13 @@ $ cp .env.example .env
 $ docker-compose build
 ```
 
-## Installation
+## Run
 
 ```bash
 $ docker-compose up -d
 ```
 
-## Run Database Migration with Prisma ORM
+## Database Migration
 
 Before this, make sure you set up a mysql database on your machine and create environment variable named 'DATABASE_URL' with the connection url. Then the following command will automatically create the relevant tables in the database
 
@@ -30,7 +30,7 @@ Before this, make sure you set up a mysql database on your machine and create en
 $ docker-compose exec app yarn migrate
 ```
 
-## Run Database Seed with Prisma ORM
+## Database Seed
 
 Before this, make sure you set up a mysql database on your machine and create environment variable named 'DATABASE_URL' with the connection url. Then the following command will automatically create the relevant tables in the database
 
