@@ -9,7 +9,7 @@ export class MoneyValuesService {
 
   public async create(values: any) {
     try {
-      return await this.prisma.user.create({
+      return await this.prisma.moneyValue.create({
         data: values,
       });
     } catch (error) {
@@ -21,7 +21,7 @@ export class MoneyValuesService {
 
   public async findById(id: number) {
     try {
-      return await this.prisma.user.findFirst({
+      return await this.prisma.moneyValue.findFirst({
         where: { id },
       });
     } catch (error) {
@@ -33,7 +33,7 @@ export class MoneyValuesService {
 
   public async getAll() {
     try {
-      return await this.prisma.user.findMany();
+      return await this.prisma.moneyValue.findMany();
     } catch (error) {
       console.log(error);
     } finally {
@@ -43,7 +43,7 @@ export class MoneyValuesService {
 
   public async updateById(id: number, values: any) {
     try {
-      return await this.prisma.user.update({
+      return await this.prisma.moneyValue.update({
         data: values,
         where: { id },
       });
@@ -56,17 +56,13 @@ export class MoneyValuesService {
 
   public async updateOrCreate(id: number, values: any) {
     try {
-      const update = {
-        age: values.age,
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      };
-
-      return await this.prisma.user.upsert({
-        update,
+      return await this.prisma.moneyValue.upsert({
         create: values,
         where: { id },
+        update: {
+          amount: values.amount,
+          treasure_id: values.treasure_id,
+        },
       });
     } catch (error) {
       console.log(error);

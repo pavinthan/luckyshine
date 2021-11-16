@@ -5,7 +5,7 @@ import type { Server } from '@hapi/hapi';
 const controller = new TreasureController();
 
 const treasureRoutes = {
-  name: 'treasures',
+  name: 'Treasures',
   register: async (server: Server) => {
     server.route([
       {

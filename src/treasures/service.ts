@@ -1,4 +1,3 @@
-// import { Prisma } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 
 export class TreasureService {
@@ -10,10 +9,9 @@ export class TreasureService {
 
   public async create(values: any) {
     try {
-      // TODO Prisma.sql
-      return await this.prisma.$queryRawUnsafe(
-        `INSERT INTO treasures (id,name,coordinate,updated_at) VALUES ('${values.id}', '${values.name}', ST_GeomFromText('${values.coordinate}'), now())`
-      );
+      return await this.prisma.treasure.create({
+        data: values,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -33,8 +31,9 @@ export class TreasureService {
     }
   }
 
-  public async getAll() {
+  public async getAll(query = {}) {
     try {
+      console.log(query);
       return await this.prisma.treasure.findMany();
     } catch (error) {
       console.log(error);
@@ -45,10 +44,10 @@ export class TreasureService {
 
   public async updateById(id: number, values: any) {
     try {
-      // TODO Prisma.sql
-      return await this.prisma.$queryRawUnsafe(
-        `UPDATE treasures SET name = '${values.name}', coordinate = ST_GeomFromText('${values.coordinate}'), updated_at = now() WHERE id = '${id}'`
-      );
+      return await this.prisma.treasure.update({
+        data: values,
+        where: { id },
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -58,12 +57,15 @@ export class TreasureService {
 
   public async updateOrCreate(id: number, values: any) {
     try {
-      const treasure = await this.findById(id);
-      if (treasure) {
-        return await this.updateById(id, values);
-      } else {
-        return await this.create(values);
-      }
+      return await this.prisma.treasure.upsert({
+        create: values,
+        where: { id },
+        update: {
+          name: values.name,
+          latitude: values.latitude,
+          longitude: values.longitude,
+        },
+      });
     } catch (error) {
       console.log(error);
     } finally {
