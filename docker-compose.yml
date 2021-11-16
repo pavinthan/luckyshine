@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  # app:
+  #   build:
+  #     context: '.'
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - mysql
+  #   environment:
+  #     - DATABASE_URL=mysql://roo@${DB_PASSWORD}/${DB_DATABASE}
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - '3306:3306'
+volumes:
+  mysql:

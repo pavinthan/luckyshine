@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Treasure {
+    id          Int                  @id @default(autoincrement())
+    name        String
+    coordinate  Unsupported("point")
+    MoneyValues MoneyValue[]
+    created_at  DateTime             @default(now())
+    updated_at  DateTime             @updatedAt
+    deleted     Boolean              @default(false)
+
+    @@map("treasures")
+}
+
+model User {
+    id         Int      @id @default(autoincrement())
+    age        Int
+    name       String
+    email      String   @unique
+    password   String
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    deleted    Boolean  @default(false)
+
+    @@map("users")
+}
+
+model MoneyValue {
+    id          Int      @id @default(autoincrement())
+    amount      Int
+    treasure_id Int
+    treasure    Treasure @relation(fields: [treasure_id], references: [id])
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
+    deleted     Boolean  @default(false)
+
+    @@map("money_values")
+}
